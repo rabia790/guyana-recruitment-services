@@ -1,0 +1,8 @@
+{
+  "name": "Guyana Recruitment Services",
+  "description": "A professional staffing and recruitment platform for Guyana and the wider Caribbean, specializing in Oil & Gas, Healthcare, and Hospitality sectors.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
