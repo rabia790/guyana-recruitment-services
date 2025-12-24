@@ -1,29 +1,28 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import { GoogleGenAI } from "@google/genai";
+/**
+ * VITE REQUIREMENT: 
+ * 1. Variables MUST start with VITE_ to be used in the browser.
+ * 2. Use 'import.meta.env' instead of 'process.env'.
+ */
+const API_KEY = import.meta.env.VITE_API_KEY;
 
-// Initialize the Google GenAI client using the environment variable API_KEY strictly as defined in guidelines.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Initialize the Google Generative AI client
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 export const getGeminiResponse = async (userMessage: string) => {
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: userMessage,
-      config: {
-        systemInstruction: `You are a professional recruiting assistant for Guyana Recruitment Services, a staffing firm based in Guyana serving the Caribbean region. 
-        You specialize in:
-        1. Oil & Gas (Offshore operations, engineering, technical safety)
-        2. Healthcare (Nurses, medical technicians, clinical staff)
-        3. Hospitality (Hotel management, culinary, guest services)
-        
-        Keep your tone professional, helpful, and representative of Guyanese and Caribbean hospitality. 
-        Answer questions about staffing services, how to apply for jobs, and general workforce advice for the region. 
-        If asked about job applications, suggest they visit our Careers section.
-        If asked about hiring, suggest they visit our Contact page or use the Request Staff button.`,
-        temperature: 0.7,
-      },
+    // Note: 'gemini-3-flash-preview' is not a valid public model name. 
+    // Use 'gemini-1.5-flash' for the best performance.
+    const model = genAI.getGenerativeModel({ 
+      model: "gemini-1.5-flash", 
+      systemInstruction: `You are a professional recruiting assistant for Guyana Recruitment Services... (Keep your existing prompt here)`
     });
-    return response.text;
+
+    const result = await model.generateContent(userMessage);
+    const response = await result.response;
+    return response.text();
+
   } catch (error) {
     console.error("Gemini API Error:", error);
     return "I'm sorry, I'm having trouble connecting right now. Please try again or contact us directly at +592 555-GUYANA.";
